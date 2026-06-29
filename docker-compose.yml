@@ -1,9 +1,9 @@
 services:
-  frontend:
+  next:
     image: node:24-alpine
     working_dir: /app
     volumes:
-      - ./next:/app
+      - ./:/app
     ports:
       - "3000:3000"
     # Instaluje paczki, a potem uruchamia serwer z flagą --host

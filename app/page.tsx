@@ -1,13 +1,26 @@
-import Link from 'next/link';
+import { getStoryblokApi, StoryblokComponent } from "@storyblok/react";
 
-export default function Home() {
+// Funkcja asynchronicznie pobierająca dane ze Storyblok API
+async function fetchStoryblokData() {
+  let storyblokApi = getStoryblokApi();
+  
+  return storyblokApi.get("cdn/stories/home", {
+    version: "draft", // pobieramy wersję roboczą dla edytora
+  });
+}
+
+export default async function Home() {
+  const { data } = await fetchStoryblokData();
+  const story = data.story;
+
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen p-8 bg-gray-50 text-gray-900">
-      <h1 className="text-4xl font-bold mb-4">Witaj w mojej aplikacji Next.js! 👋</h1>
-      <p className="text-lg text-gray-600">To jest moja pierwsza strona zbudowana na App Routerze.</p>
-      <Link href="/o-nas" className="text-sm font-semibold text-blue-500 hover:text-blue-700 transition-colors">
-        Przejdz do strony o nas
-      </Link>
-    </main>
+    <div className="min-h-screen bg-gray-100 py-6">
+      <header className="text-center mb-8">
+        <p className="text-xs text-emerald-600 font-mono tracking-widest uppercase">Connected to Headless CMS</p>
+      </header>
+      
+      // Renderuje główny komponent mapujący (page)
+      <StoryblokComponent blok={story.content} />
+    </div>
   );
 }
